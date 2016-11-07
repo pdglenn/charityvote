@@ -10,32 +10,32 @@ def index():
     return render_template('index.html')
 
 
-@application.route('manage'):
+@application.route('/manage')
 def manage():
     return render_template('manage.html')
 
 
-@application.route('browse'):
+@application.route('/browse')
 def browse():
     return render_template('browse.html')
 
 
-@application.route('create'):
+@application.route('/create')
 def create():
     return render_template('create.html')
 
 
-@application.route('view/<contest_id>'):
+@application.route('/view/<contest_id>')
 def view(contest_id):
     return render_template('view.html')
 
 
-@application.route('results/<contest_id>')
+@application.route('/results/<contest_id>')
 def results(contest_id):
     return render_template('results.html')
 
 
-@application.route('confirmation/<contest_id>')
+@application.route('/confirmation/<contest_id>')
 def confirmation(contest_id):
     return render_template('confirmation.html')
 
