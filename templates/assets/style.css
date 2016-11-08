@@ -1,0 +1,72 @@
+body, html
+{
+    background-color: #EDEDED !important;
+}
+
+.intro
+{
+    text-align: center;
+    padding-top: 13%;
+    padding-bottom: 13%;
+    margin-bottom: 50px;
+
+}
+
+.intro h1
+{
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.intro h5
+{
+    text-transform: uppercase;
+    background-color: #f5f5f5;
+    padding: 10px;
+    color: #333333;
+    display: inline-block;
+    font-size: 1.2rem;
+}
+
+.recommended .col
+{
+    margin-bottom: 24px;
+}
+
+.recommended h5
+{
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.recommended h6
+{
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 45px;
+}
+
+.recommended hr
+{
+    width: 40px;
+    margin-bottom: 45px;
+}
+
+.recommended .recommended-holder
+{
+    clear: both;
+    text-align: center;
+}
+
+.recommended img
+{
+    width: 33%;
+    display: inline-block;
+    float: left;
+}
+
+/*footer
+{
+    padding-top: 0px;
+}*/
