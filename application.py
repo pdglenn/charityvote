@@ -29,6 +29,9 @@ def create():
 def view(contest_id):
     return render_template('view.html')
 
+@application.route('/view/')
+def view_generic():
+    return render_template('view.html')
 
 @application.route('/results/<contest_id>')
 def results(contest_id):
