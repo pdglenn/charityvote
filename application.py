@@ -37,6 +37,9 @@ def view_generic():
 def results(contest_id):
     return render_template('results.html')
 
+@application.route('/results/')
+def results_generic():
+    return render_template('results.html')
 
 @application.route('/confirmation/<contest_id>')
 def confirmation(contest_id):
