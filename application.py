@@ -44,7 +44,9 @@ def results_generic():
 @application.route('/confirmation/<contest_id>')
 def confirmation(contest_id):
     return render_template('confirmation.html')
-
+@application.route('/confirmation/')
+def gen_confirmation():
+    return render_template('confirmation.html')
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
