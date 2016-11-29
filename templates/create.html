@@ -1,6 +1,8 @@
 {% extends "base.html" %} 
 {% block content %}
 <div class="container browse">
+  <form action="" method="post">
+  {{ form.hidden_tag() }}
   <div class="row">
     <div class="col s6 left-align"><h5>Create a New Competiton</h5></div>
     <hr>
@@ -10,39 +12,31 @@
       Title 
     </div>
     <div class="col s3">
-      Text Box
+      {{form.title(size=120)}}
     </div>
     </div>
-    <div class="row">
-    <div class="col s3">
-      View without voting
-    </div>
-    <div class="col s3">
-      Checkbox
-    </div>
-    </div>
+
+    {%for o in form.options%}
       <div class="row">
-
+        
     <div class="col s3">
       Description of option
     </div>
-    <div class="col s6">
-      <img class="materialboxed" src="https://octodex.github.com/images/megacat.jpg" height=200>
-    </div>
-  </div>
-  <div class="row">
-
     <div class="col s3">
-      Description of option
+      {{o.form.description}}
     </div>
     <div class="col s6">
-      <img class="materialboxed" src="https://octodex.github.com/images/megacat.jpg" height=200>
+      {{o.form.image_url}}
+      
     </div>
   </div>
+{% endfor %}
+
+
   <div class="row">
 
-    <div class="col s3 offset-s3">
-      <a class="waves-effect waves-light btn">Add another option</a>
+    <div class="col s3 offset-s6">
+      <input type="submit"  class="waves-effect waves-light btn" value ="Add Option" name ="add_option"></input>
     </div>
   
   </div>
@@ -51,7 +45,7 @@
       Amount
     </div>
     <div class="col s3">
-      TextBox
+    {{form.amount()}}
     </div>
     </div>
           <div class="row">
@@ -59,17 +53,18 @@
       Expiry Date
     </div>
     <div class="col s3">
-      Date Picker
+      {{form.date()}}
     </div>
     </div>
   <hr>
   <div class="row">
 
     <div class="col s3 offset-s4">
-      <a class="waves-effect waves-light btn">Submit Campaign</a>
+      <input typ="submit" value ="Submit Competition" name = "submit_competition" class="waves-effect waves-light btn"></input>
     </div>
   
   </div>
+  </form>
     </div>
   
  
