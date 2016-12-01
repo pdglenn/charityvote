@@ -11,7 +11,6 @@ class CreateForm(Form):
     title = StringField('title', validators=[DataRequired()])
     amount = StringField('amount', validators=[DataRequired()])
     date = DateField('expiry', validators=[DataRequired()],format='%Y-%m-%d')
-    voteprefs = BooleanField(false_values=None)
     options = FieldList(FormField(OptionForm),min_entries = 1)
 
 class AddTripForm(Form):

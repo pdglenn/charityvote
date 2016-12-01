@@ -1,10 +1,11 @@
 from application import forms, models
 from flask import Flask, render_template, request
-UPLOAD_FOLDER = '/path/to/the/uploads'
+import os
+UPLOAD_FOLDER = 'images/'
 application = Flask(__name__)
 application.debug = True
 application.secret_key = ('you_wont_guess')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @application.route('/')
 def index():
     return render_template('index.html')
@@ -29,8 +30,21 @@ def create():
              optionform.description=""
              optionform.image_url=""
              cform.options.append_entry(optionform)
-        if 'submit_competition' in request.form :
-            comp =[]
+         if 'submit_comp' in request.form :
+            print("submiting ")
+            title = cform.title.data
+            amount = cform.amount.data
+            date = cform.date.data
+            comp_id = models.create_competition(title,amount,date)
+            for f in cform.options:
+                file_name = f.image_url
+                print ("OK" + str(file_name.name))
+                files = request.files[file_name.name]
+                image_url = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
+                models.create_option(f.description.data,image_url,id)
+                files.save(image_url)
+
+                print(files.filename)
 
     return render_template('create.html',form = cform)
 

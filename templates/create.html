@@ -1,7 +1,7 @@
 {% extends "base.html" %} 
 {% block content %}
 <div class="container browse">
-  <form action="" method="post">
+  <form action="" method="post" enctype="multipart/form-data">
   {{ form.hidden_tag() }}
   <div class="row">
     <div class="col s6 left-align"><h5>Create a New Competiton</h5></div>
@@ -60,7 +60,7 @@
   <div class="row">
 
     <div class="col s3 offset-s4">
-      <input typ="submit" value ="Submit Competition" name = "submit_competition" class="waves-effect waves-light btn"></input>
+      <input type="submit"  class="waves-effect waves-light btn" value ="Submit" name ="submit_comp"></input>
     </div>
   
   </div>
