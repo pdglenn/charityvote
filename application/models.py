@@ -1,5 +1,6 @@
 import MySQLdb
 import uuid
+import time,random
 host = "charityvote.cloalfxvxpbz.us-west-2.rds.amazonaws.com"
 port = 3306
 password ="tree1234"
@@ -8,9 +9,18 @@ username = "root"
 def create_competition (title,amount,expiry_date):
     db = MySQLdb.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    id =  uuid.uuid4()
-    cursor.execute("insert into competitions values (%s,%s,%s,%s) ",(id,title,amount,expiry_date))
+    print ("Creating Competition")
+    flag = 1
+    while flag == 1:
+        try :
+            id =  int(time.time()) + int(random.random())
+            cursor.execute("insert into competitions values (%s,%s,%s,%s) ",(id,title,amount,expiry_date))
+            flag = 0
+        except MySQLdb.IntegrityError as e:
+            if 'PRIMARY' in e.message:
+                continue
     db.commit()
+    print ("Creating Done")
     return id
 
 
@@ -19,6 +29,13 @@ def create_competition (title,amount,expiry_date):
 def create_option (description,image_url,comp_id):
     db = MySQLdb.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    id =  uuid.uuid4()
-    ursor.execute("insert into comp_option values (%s,%s,%s,%s) ",(id,description,image_url,comp_id))
+    flag = 1
+    while flag ==1:
+        try:
+            id =  int(time.time()) + int(random.random())
+            cursor.execute("insert into comp_option values (%s,%s,%s,%s) ",(id,description,image_url,comp_id))
+        except MySQLdb.IntegrityError as e:
+            if 'PRIMARY' in e.message:
+                continue
+                
     db.commit()

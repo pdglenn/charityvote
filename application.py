@@ -41,7 +41,7 @@ def create():
                 print ("OK" + str(file_name.name))
                 files = request.files[file_name.name]
                 image_url = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
-                models.create_option(f.description.data,image_url,id)
+                models.create_option(f.description,image_url,id)
                 files.save(image_url)
 
                 print(files.filename)
