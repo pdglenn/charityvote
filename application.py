@@ -1,6 +1,9 @@
 from application import forms
 from flask import Flask, render_template, request
 import os
+import uuid
+import pymysql
+import random,time
 
 
 application = Flask(__name__)
@@ -40,13 +43,17 @@ def create():
             amount = cform.amount.data
             date = cform.date.data
             comp_id = create_competition(title,amount,date)
+            
             for f in cform.options:
                 file_name = f.image_url
+                cur = f.data
+                print (cur)
                 print ("OK" + str(file_name.name))
                 files = request.files[file_name.name]
-                image_url = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
-                create_option(f.description.data,image_url,id)
-                files.save(image_url)
+                location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
+                print ("trial and error "+ str(cur["description"]))
+                create_option(f.description,location,comp_id)
+                files.save(location)
 
                 print(files.filename)
 
@@ -88,16 +95,33 @@ username = application.config['SQL_USERNAME']
 def create_competition (title,amount,expiry_date):
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    id =  uuid.uuid4()
-    cursor.execute("insert into competitions values (%s,%s,%s,%s) ",(id,title,amount,expiry_date))
+    print ("Creating Competition")
+    flag = 1
+    while flag == 1:
+        try:
+            id =  int(time.time()) + int(random.random())
+            cursor.execute("insert into competitions values (%s,%s,%s,%s) ",(id,title,amount,expiry_date))
+            flag = 0
+        except pymysql.IntegrityError as e:
+            if 'PRIMARY' in e.message:
+                continue
     db.commit()
+    print ("Creating Done")
     return id
 
 def create_option (description,image_url,comp_id):
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    id =  uuid.uuid4()
-    cursor.execute("insert into comp_option values (%s,%s,%s,%s) ",(id,description,image_url,comp_id))
+    flag = 1
+    while flag ==1:
+        try:
+            id =  int(time.time()) + int(random.random())
+            cursor.execute("insert into comp_option values (%s,%s,%s,%s) ",(id,description,image_url,comp_id))
+            flag = 0
+        except pymysql.IntegrityError as e:
+            if 'PRIMARY' in e.message:
+                continue
+                
     db.commit()
 
 if __name__ == '__main__':
