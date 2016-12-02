@@ -1,3 +1,4 @@
+from __future__ import print_function
 from application import forms
 from flask import Flask, render_template, request
 import os
@@ -14,8 +15,11 @@ application.secret_key = ('you_wont_guess')
 
 application.config.from_pyfile('config.py', silent=True)
 
+print('databse is: ',application.config['SQLALCHEMY_DATABASE_URI'])
+
 application.config['SECURITY_POST_LOGIN'] = '/profile'
-db = SQLAlchemy(application)
+db = SQLAlchemy()
+db.init_app(application)
 
 roles_users = db.Table('roles_users',
         db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
@@ -24,6 +28,7 @@ roles_users = db.Table('roles_users',
 class Connection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    full_name = db.Column(db.String(512))
     provider_id = db.Column(db.String(255))
     provider_user_id = db.Column(db.String(255))
     access_token = db.Column(db.String(255))
@@ -49,13 +54,14 @@ class User(db.Model, UserMixin):
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(application, user_datastore)
-
+social = Social(application, SQLAlchemyConnectionDatastore(db, Connection))
 # Create a user to test with
 @application.before_first_request
 def create_user():
     db.create_all()
-    user_datastore.create_user(email='matt@nobien.net', password='password')
+    # user_datastore.create_user(email='matt@nobien.net', password='password')
     db.session.commit()
+    pass
 
 @application.route('/')
 def index():
@@ -67,9 +73,7 @@ def profile():
     return render_template(
         'profile.html',
         content='Profile Page',
-        twitter_conn=social.twitter.get_connection(),
-        facebook_conn=social.facebook.get_connection(),
-        foursquare_conn=social.foursquare.get_connection())
+        facebook_conn=social.facebook.get_connection())
 
 @application.route('/manage')
 def manage():
