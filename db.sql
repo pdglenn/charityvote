@@ -53,12 +53,5 @@ create table roles_users
   foreign key(role_id) references role(id)
 );
 
-create table user_comp (
-  id integer primary key,
-  user_id integer not null,
-  comp_id integer not null,
-  foreign key(user_id) references user(id),
-  foreign key(comp_id) references competitions(id)
-);
 
 insert into user (id, username, password) values ("1", "fred", "fred");

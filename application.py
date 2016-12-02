@@ -112,7 +112,8 @@ def create():
             files = request.files[comp_file.name]
             location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
             description = cform.comp_description.data
-            comp_id = create_competition(title,description,amount,date,location,str (session ["user_id"]))
+            location_indb = "images/"+files.filename
+            comp_id = create_competition(title,description,amount,date,location_indb,str (session ["user_id"]))
             files.save(location)
 
             for f in cform.options:
@@ -122,8 +123,9 @@ def create():
                 print ("OK" + str(file_name.name))
                 files = request.files[file_name.name]
                 location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
+                location_indb = "images/"+files.filename
                 print ("trial and error "+ str(cur["description"]))
-                create_option(f.description,location,comp_id)
+                create_option(f.description,location_indb,comp_id)
                 files.save(location)
 
 
@@ -199,13 +201,16 @@ def create_option (description,image_url,comp_id):
 def retrieve_reco_comps():
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    result = cursor.execute("SELECT * from competitions limit 3").fetchall()
+    cursor.execute("SELECT * from competitions limit 3")
+    result = cursor.fetchall()
+    print(result)
     return result
 
 def retrieve_featured_comp():
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    result = cursor.execute("SELECT * from competitions ORDER BY RAND() LIMIT 1").fetchall()
+    cursor.execute("SELECT * from competitions ORDER BY RAND() LIMIT 1")
+    result = cursor.fetchall()
     return result
 
 if __name__ == '__main__':

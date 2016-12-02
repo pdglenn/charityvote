@@ -14,7 +14,7 @@
   <div class="row">
       <div class="col s12 m12 l12 recommended-holder">
         {% for comp in reco_comps %}
-        <a href=""><img class="materialboxed col s4" src="{{url_for('static', filename='{{ comp['image_url'] }}')}}"></a>
+        <a href=""><img class="materialboxed col s4" src="{{url_for('static', filename='{{ comp[5] }}')}}"></a>
         {% endfor %}
       </div>
   </div>
