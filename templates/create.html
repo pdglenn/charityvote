@@ -15,6 +15,22 @@
                 {{form.title(size=120)}}
             </div>
         </div>
+           <div class="row">
+            <div class="col s3">
+                Description
+            </div>
+            <div class="col s3">
+                {{form.comp_description(size=120)}}
+            </div>
+        </div>
+           <div class="row">
+            <div class="col s3">
+                Image
+            </div>
+            <div class="col s3">
+                {{form.comp_img}}
+            </div>
+        </div>
 
         {%for o in form.options%}
         <div class="row">
