@@ -6,8 +6,6 @@ import uuid
 import pymysql
 import random,time
 
-
-
 from flask_social import Social
 from flask_social.datastore import SQLAlchemyConnectionDatastore
 from flask_sqlalchemy import SQLAlchemy
@@ -70,7 +68,8 @@ def create_user():
 
 @application.route('/')
 def index():
-    comps = retrieve_all_comps()
+    reco_comps = retrieve_reco_comps()
+    featured_comp = retrieve_featured_comp()
     return render_template('index.html')
 
 @application.route('/profile')
@@ -106,7 +105,7 @@ def create():
             amount = cform.amount.data
             date = cform.date.data
             comp_id = create_competition(title,amount,date)
-            
+
             for f in cform.options:
                 file_name = f.image_url
                 cur = f.data
@@ -185,15 +184,20 @@ def create_option (description,image_url,comp_id):
         except pymysql.IntegrityError as e:
             if 'PRIMARY' in e.message:
                 continue
-                
+
     db.commit()
 
-def retrieve_all_comps():
+def retrieve_reco_comps():
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    result = cursor.execute("SELECT * from competitions").fetchall()
+    result = cursor.execute("SELECT * from competitions limit 3").fetchall()
     return result
 
+def retrieve_featured_comp():
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    result = cursor.execute("SELECT * from competitions ORDER BY RAND() LIMIT 1").fetchall()
+    return result
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
