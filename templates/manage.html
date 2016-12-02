@@ -1,13 +1,15 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block content %}
 <div class="container browse">
+Your Profile
+
 <table class = "striped">
         <thead>
           <tr>
               <th data-field="id">Competiton</th>
               <th data-field="name">Total Collected</th>
               <th data-field="name">Expiry Date</th>
-              
+
           </tr>
         </thead>
 
@@ -16,21 +18,21 @@
             <td>Alvin</td>
             <td>200$</td>
             <td>03/11/2016</td>
-            <td><a class="waves-effect waves-light btn">Extend Campaign</a></td>
+            <td><input type="submit"  class="waves-effect waves-light btn blue" value ="Extend Campaign" name =""></input></td>
           </tr>
           <tr>
             <td>Alan</td>
             <td>300$</td>
             <td>03/11/2016</td>
-            <td><a class="waves-effect waves-light btn">Extend Campaign</a></td>
+            <td><input type="submit"  class="waves-effect waves-light btn blue" value ="Extend Campaign" name =""></input></td>
           </tr>
           <tr>
             <td>Jonathan</td>
             <td>400$</td>
             <td>02/11/2016</td>
-            <td><a class="waves-effect waves-light btn">View Result</a></td>
+            <td><input type="submit"  class="waves-effect waves-light btn blue" value ="View Results" name =""></input></td>
           </tr>
         </tbody>
-      </table> 
+      </table>
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block content %}
 <div class="container browse">
   <form action="" method="post" enctype="multipart/form-data">
@@ -9,7 +9,7 @@
   </div>
     <div class="row">
     <div class="col s3">
-      Title 
+      Title
     </div>
     <div class="col s3">
       {{form.title(size=120)}}
@@ -18,7 +18,7 @@
 
     {%for o in form.options%}
       <div class="row">
-        
+
     <div class="col s3">
       Description of option
     </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="col s6">
       {{o.form.image_url}}
-      
+
     </div>
   </div>
 {% endfor %}
@@ -36,9 +36,9 @@
   <div class="row">
 
     <div class="col s3 offset-s6">
-      <input type="submit"  class="waves-effect waves-light btn" value ="Add Option" name ="add_option"></input>
+      <input type="submit"  class="waves-effect waves-light btn blue" value ="Add Option" name ="add_option"></input>
     </div>
-  
+
   </div>
       <div class="row">
     <div class="col s3">
@@ -60,13 +60,13 @@
   <div class="row">
 
     <div class="col s3 offset-s4">
-      <input type="submit"  class="waves-effect waves-light btn" value ="Submit" name ="submit_comp"></input>
+      <input type="submit"  class="waves-effect waves-light btn blue" value ="Submit" name ="submit_comp"></input>
     </div>
-  
+
   </div>
   </form>
     </div>
-  
- 
+
+
 </div>
 {% endblock %}
