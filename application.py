@@ -5,7 +5,7 @@ import os
 import uuid
 import pymysql
 import random,time
-
+from flask import session
 
 
 from flask_social import Social
@@ -93,6 +93,7 @@ def browse():
 
 @application.route('/create',methods=['GET','POST'])
 def create():
+    session ["user_id"] =1
     cform = forms.CreateForm()
     if request.method =="POST":
          if 'add_option' in request.form  :
@@ -105,7 +106,12 @@ def create():
             title = cform.title.data
             amount = cform.amount.data
             date = cform.date.data
-            comp_id = create_competition(title,amount,date)
+            comp_file = cform.comp_img.data
+            files = request.files[comp_file.name]
+            location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
+            description = cform.comp_description.data
+            comp_id = create_competition(title,description,amount,date,location,str (session ["user_id"]))
+            files.save(location)
             
             for f in cform.options:
                 file_name = f.image_url
@@ -156,7 +162,7 @@ port = 3306
 password = application.config['SQL_PASSWORD']
 username = application.config['SQL_USERNAME']
 
-def create_competition (title,amount,expiry_date):
+def create_competition (title,description,amount,expiry_date,image_url,user_id):
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
     print ("Creating Competition")
@@ -164,7 +170,7 @@ def create_competition (title,amount,expiry_date):
     while flag == 1:
         try:
             id =  int(time.time()) + int(random.random())
-            cursor.execute("insert into competitions values (%s,%s,%s,%s) ",(id,title,amount,expiry_date))
+            cursor.execute("insert into competitions(id,title,description,amount,date,image_url,user_id) values (%s,%s,%s,%s,%s,%s,%s) ",(id,title,description,amount,expiry_date,image_url,user_id))
             flag = 0
         except pymysql.IntegrityError as e:
             if 'PRIMARY' in e.message:
@@ -180,7 +186,7 @@ def create_option (description,image_url,comp_id):
     while flag ==1:
         try:
             id =  int(time.time()) + int(random.random())
-            cursor.execute("insert into comp_option values (%s,%s,%s,%s) ",(id,description,image_url,comp_id))
+            cursor.execute("insert into comp_option (id,description,image_url,comp_id,votes) values (%s,%s,%s,%s,0) ",(id,description,image_url,comp_id))
             flag = 0
         except pymysql.IntegrityError as e:
             if 'PRIMARY' in e.message:

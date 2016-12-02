@@ -9,7 +9,9 @@ class OptionForm(Form):
 class CreateForm(Form):
     
     title = StringField('title', validators=[DataRequired()])
+    comp_description = StringField('title', validators=[DataRequired()])
     amount = StringField('amount', validators=[DataRequired()])
+    comp_img = FileField('image',validators =[DataRequired()])
     date = DateField('expiry', validators=[DataRequired()],format='%Y-%m-%d')
     options = FieldList(FormField(OptionForm),min_entries = 1)
     
