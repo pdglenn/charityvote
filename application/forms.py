@@ -12,12 +12,7 @@ class CreateForm(Form):
     amount = StringField('amount', validators=[DataRequired()])
     date = DateField('expiry', validators=[DataRequired()],format='%Y-%m-%d')
     options = FieldList(FormField(OptionForm),min_entries = 1)
-
-class AddTripForm(Form):
-    trip_name= StringField('trip_name', validators=[DataRequired()])
-    destination= StringField('destination', validators=[DataRequired()])
     
-    friend= SelectField('friends', validators = [DataRequired()])
 
 
 # class OrdersForm(Form):
