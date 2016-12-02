@@ -2,6 +2,11 @@ from application import forms
 from flask import Flask, render_template, request
 import os
 
+from flask_social import Social
+from flask_social.datastore import SQLAlchemyConnectionDatastore
+from flask_sqlalchemy import SQLAlchemy
+from flask_security import Security, SQLAlchemyUserDatastore, \
+    UserMixin, RoleMixin, login_required
 
 application = Flask(__name__)
 application.debug = True
@@ -9,11 +14,62 @@ application.secret_key = ('you_wont_guess')
 
 application.config.from_pyfile('config.py', silent=True)
 
+application.config['SECURITY_POST_LOGIN'] = '/profile'
+db = SQLAlchemy(application)
+
+roles_users = db.Table('roles_users',
+        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+
+class Connection(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    provider_id = db.Column(db.String(255))
+    provider_user_id = db.Column(db.String(255))
+    access_token = db.Column(db.String(255))
+    secret = db.Column(db.String(255))
+    display_name = db.Column(db.String(255))
+    profile_url = db.Column(db.String(512))
+    image_url = db.Column(db.String(512))
+    rank = db.Column(db.Integer)
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(application, user_datastore)
+
+# Create a user to test with
+@application.before_first_request
+def create_user():
+    db.create_all()
+    user_datastore.create_user(email='matt@nobien.net', password='password')
+    db.session.commit()
 
 @application.route('/')
 def index():
     return render_template('index.html')
 
+@application.route('/profile')
+@login_required
+def profile():
+    return render_template(
+        'profile.html',
+        content='Profile Page',
+        twitter_conn=social.twitter.get_connection(),
+        facebook_conn=social.facebook.get_connection(),
+        foursquare_conn=social.foursquare.get_connection())
 
 @application.route('/manage')
 def manage():
