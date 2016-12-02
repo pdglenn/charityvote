@@ -2,6 +2,9 @@ from __future__ import print_function
 from application import forms
 from flask import Flask, render_template, request
 import os
+import uuid
+import pymysql
+
 
 from flask_social import Social
 from flask_social.datastore import SQLAlchemyConnectionDatastore
@@ -15,7 +18,7 @@ application.secret_key = ('you_wont_guess')
 
 application.config.from_pyfile('config.py', silent=True)
 
-print('databse is: ',application.config['SQLALCHEMY_DATABASE_URI'])
+print('database is: ',application.config['SQLALCHEMY_DATABASE_URI'])
 
 application.config['SECURITY_POST_LOGIN'] = '/profile'
 db = SQLAlchemy()
@@ -65,6 +68,7 @@ def create_user():
 
 @application.route('/')
 def index():
+    comps = retrieve_all_comps()
     return render_template('index.html')
 
 @application.route('/profile')
@@ -105,7 +109,7 @@ def create():
                 print ("OK" + str(file_name.name))
                 files = request.files[file_name.name]
                 image_url = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
-                create_option(f.description.data,image_url,id)
+                create_option(f.description.data,image_url,comp_id)
                 files.save(image_url)
 
                 print(files.filename)
@@ -114,7 +118,7 @@ def create():
 
 
 
-    
+
 @application.route('/view/<contest_id>')
 def view(contest_id):
     return render_template('view.html')
@@ -125,7 +129,7 @@ def view_generic():
 
 @application.route('/results/<contest_id>')
 def results(contest_id):
-    
+
     return render_template('results.html')
 
 @application.route('/results/')
@@ -159,6 +163,13 @@ def create_option (description,image_url,comp_id):
     id =  uuid.uuid4()
     cursor.execute("insert into comp_option values (%s,%s,%s,%s) ",(id,description,image_url,comp_id))
     db.commit()
+
+def retrieve_all_comps():
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    result = cursor.execute("SELECT * from competitions").fetchall()
+    return result
+
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
