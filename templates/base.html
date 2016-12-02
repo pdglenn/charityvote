@@ -28,7 +28,7 @@
                         </div>
                     </li>
                 </ul>
-                <a href="/display_trips" class="brand-logo center"><i class="material-icons">hot_tub</i>VoteIt</a>
+                <a href="/" class="brand-logo center"><i class="material-icons">hot_tub</i>VoteIt</a>
 
 
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -37,7 +37,9 @@
 
 
                     <li><a href="#">Browse</a></li>
-                    <li><a href="#">Create competition</a></li>
+                    <li><a href="/create">Create competition</a></li>
+                    <li id="login"><a href="/manage">Sign in/Profile</a></li>
+
                     <!-- <input class=" action-button btn-flat white" id="logout-button" type="submit" value="Logout"> -->
                     <!-- </form></li> -->
                 </ul>
@@ -50,30 +52,30 @@
         {% block content %} {% endblock %}
     </div>
     <footer class="page-footer blue">
-          <div class="container">
+        <div class="container">
             <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text">About Us</h5>
-                <p class="grey-text text-lighten-4">We think this is awesome and we hope you do too.</p>
-                <a class="grey-text text-lighten-3" href="#!">Contact us</a>
-              </div>
-              <div class="col l2 offset-l4 s12">
-                <h5 class="white-text">Help</h5>
-                <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!">FAQ</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Terms of Use</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Privacy Policy</a></li>
-                </ul>
-              </div>
+                <div class="col l6 s12">
+                    <h5 class="white-text">About Us</h5>
+                    <p class="grey-text text-lighten-4">We think this is awesome and we hope you do too.</p>
+                    <a class="grey-text text-lighten-3" href="#!">Contact us</a>
+                </div>
+                <div class="col l2 offset-l4 s12">
+                    <h5 class="white-text">Help</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">FAQ</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Terms of Use</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Privacy Policy</a></li>
+                    </ul>
+                </div>
             </div>
-          </div>
-          <div class="footer-copyright">
+        </div>
+        <div class="footer-copyright">
             <div class="container">
-            © 2016 PGP
-            <a class="grey-text text-lighten-4 right" href="#!">Social Media Links</a>
+                © 2016 PGP
+                <a class="grey-text text-lighten-4 right" href="#!">Social Media Links</a>
             </div>
-          </div>
-        </footer>
+        </div>
+    </footer>
     <script type="text/javascript" src="{{url_for('static', filename='main.js')}}">
     </script>
 </body>
