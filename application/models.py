@@ -1,5 +1,6 @@
-import MySQLdb
+import pymysql
 import uuid
+<<<<<<< HEAD
 import time,random
 host = "charityvote.cloalfxvxpbz.us-west-2.rds.amazonaws.com"
 port = 3306
@@ -39,3 +40,9 @@ def create_option (description,image_url,comp_id):
                 continue
                 
     db.commit()
+=======
+from flask import current_app as application
+
+with application.app_context():
+    
+>>>>>>> 24332185dffef4f907922d53142b23262cba78f0
