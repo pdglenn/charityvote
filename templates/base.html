@@ -20,15 +20,8 @@
     <header> {% block header %}
         <nav class="blue">
             <div class="navbar-wrapper container">
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li>
-                        <div class="input-field">
-                            <input id="search" type="search" required>
-                            <label for="search"><i class="material-icons">search</i></label>
-                        </div>
-                    </li>
-                </ul>
-                <a href="/" class="brand-logo center"><i class="material-icons">hot_tub</i>VoteIt</a>
+                <a href="/" class="brand-logo left"><img src="{{url_for('static', filename='shaka.png')}}" alt="hangloose" style="width:30px;height:25px;">
+VoteIt</a>
 
 
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -36,12 +29,18 @@
 
 
 
-                    <li><a href="/browse">Browse</a></li>
-                    <li><a href="/create">Create competition</a></li>
+
                     {% if not session.logged_in %}
-                        <li id="login"><a href="/facebook_login">Sign in</a></li>
+                      <li><a href="/browse">Browse</a></li>
+                      <li><a href="/create">Create</a></li>
+                      <li><a href="/manage">Manage</a></li>
+                      <li id="login"><a href="/facebook_login">Sign in</a></li>
                     {% else %}
-                        <li id="logout"><a href="/logout">Hello {{ session.user_name }} Sign Out</a></li>
+                      <li>Hello {{ session.user_name }}</li>
+                      <li><a href="/browse">Browse</a></li>
+                      <li><a href="/create">Create</a></li>
+                      <li><a href="/manage">Manage</a></li>
+                      <li id="logout"><a href="/logout">Sign Out</a></li>
                     {% endif %}
                     <!-- <input class=" action-button btn-flat white" id="logout-button" type="submit" value="Logout"> -->
                     <!-- </form></li> -->
