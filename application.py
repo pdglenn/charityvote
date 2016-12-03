@@ -89,6 +89,9 @@ def browse():
 
 @application.route('/create',methods=['GET','POST'])
 def create():
+    if not session.get('logged_in'):
+        session['previous_page'] = '/create'
+        return redirect(url_for('login_required'))
     cform = forms.CreateForm()
     if request.method =="POST":
          if 'add_option' in request.form  :
