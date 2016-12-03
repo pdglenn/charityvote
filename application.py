@@ -9,12 +9,6 @@ import random,time
 from flask import session
 
 
-from flask_social import Social
-from flask_social.datastore import SQLAlchemyConnectionDatastore
-from flask_sqlalchemy import SQLAlchemy
-from flask_security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
-
 application = Flask(__name__)
 application.debug = True
 application.secret_key = ('you_wont_guess')
@@ -33,53 +27,6 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': ('email, ')}
 )
 
-print('database is: ',application.config['SQLALCHEMY_DATABASE_URI'])
-
-application.config['SECURITY_POST_LOGIN'] = '/profile'
-db = SQLAlchemy()
-db.init_app(application)
-
-roles_users = db.Table('roles_users',
-        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
-
-class Connection(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    full_name = db.Column(db.String(512))
-    provider_id = db.Column(db.String(255))
-    provider_user_id = db.Column(db.String(255))
-    access_token = db.Column(db.String(255))
-    secret = db.Column(db.String(255))
-    display_name = db.Column(db.String(255))
-    profile_url = db.Column(db.String(512))
-    image_url = db.Column(db.String(512))
-    rank = db.Column(db.Integer)
-
-class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.String(255))
-    active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
-    roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))
-
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(application, user_datastore)
-social = Social(application, SQLAlchemyConnectionDatastore(db, Connection))
-# Create a user to test with
-@application.before_first_request
-def create_user():
-    db.create_all()
-    # user_datastore.create_user(email='matt@nobien.net', password='password')
-    db.session.commit()
-    pass
 
 @application.route('/')
 def index():
@@ -103,12 +50,17 @@ def facebook_login():
 @application.route("/facebook_authorized")
 @facebook.authorized_handler
 def facebook_authorized(resp):
-    next_url = request.args.get('next') or url_for('index')
+    next_url = session.get('previous_page') or request.args.get('next') or url_for('index')
     if resp is None or 'access_token' not in resp:
         return redirect(next_url)
 
     session['logged_in'] = True
     session['facebook_token'] = (resp['access_token'], '')
+
+    data = facebook.get('/me').data
+    if 'id' in data and 'name' in data:
+        session['user_id'] = data['id']
+        session['user_name'] = data['name']
 
     return redirect(next_url)
 
@@ -118,24 +70,15 @@ def logout():
     return redirect(url_for('index'))
 
 
-# @application.route('/profile')
-# @login_required
-# def profile():
-#     return render_template(
-#         'profile.html',
-#         content='Profile Page',
-#         facebook_conn=social.facebook.get_connection())
-
-# @application.route('/login')
-# def login():
-#     print('hello world')
-#     if current_user.is_authenticated():
-#         return redirect(request.referrer or '/')
-
-#     return render_template('login.html', form=forms.LoginForm())
+@application.route('/login_required')
+def login_required():
+    return render_template('login_required.html')
 
 @application.route('/manage')
 def manage():
+    if not session.get('logged_in'):
+        session['previous_page'] = '/manage'
+        return redirect(url_for('login_required'))
     return render_template('manage.html')
 
 
@@ -146,7 +89,6 @@ def browse():
 
 @application.route('/create',methods=['GET','POST'])
 def create():
-    session ["user_id"] =1
     cform = forms.CreateForm()
     if request.method =="POST":
          if 'add_option' in request.form  :
@@ -186,8 +128,6 @@ def create():
     return render_template('create.html',form = cform)
 
 
-
-
 @application.route('/view/<contest_id>')
 def view(contest_id):
     return render_template('view.html')
@@ -198,7 +138,6 @@ def view_generic():
 
 @application.route('/results/<contest_id>')
 def results(contest_id):
-
     return render_template('results.html')
 
 @application.route('/results/')
