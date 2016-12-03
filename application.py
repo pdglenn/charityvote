@@ -1,6 +1,7 @@
 from __future__ import print_function
 from application import forms
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect
+from flask_oauth import OAuth
 import os
 import uuid
 import pymysql
@@ -19,6 +20,18 @@ application.debug = True
 application.secret_key = ('you_wont_guess')
 
 application.config.from_pyfile('config.py', silent=True)
+
+oauth = OAuth()
+
+facebook = oauth.remote_app('facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key=application.config['FACEBOOK_APP_ID'],
+    consumer_secret=application.config['FACEBOOK_APP_SECRET'],
+    request_token_params={'scope': ('email, ')}
+)
 
 print('database is: ',application.config['SQLALCHEMY_DATABASE_URI'])
 
@@ -74,13 +87,52 @@ def index():
     featured_comp = retrieve_featured_comp()
     return render_template('index.html')
 
-@application.route('/profile')
-@login_required
-def profile():
-    return render_template(
-        'profile.html',
-        content='Profile Page',
-        facebook_conn=social.facebook.get_connection())
+@facebook.tokengetter
+def get_facebook_token():
+    return session.get('facebook_token')
+
+def pop_login_session():
+    session.pop('logged_in', None)
+    session.pop('facebook_token', None)
+
+@application.route("/facebook_login")
+def facebook_login():
+    return facebook.authorize(callback=url_for('facebook_authorized',
+        next=request.args.get('next'), _external=True))
+
+@application.route("/facebook_authorized")
+@facebook.authorized_handler
+def facebook_authorized(resp):
+    next_url = request.args.get('next') or url_for('index')
+    if resp is None or 'access_token' not in resp:
+        return redirect(next_url)
+
+    session['logged_in'] = True
+    session['facebook_token'] = (resp['access_token'], '')
+
+    return redirect(next_url)
+
+@application.route("/logout")
+def logout():
+    pop_login_session()
+    return redirect(url_for('index'))
+
+
+# @application.route('/profile')
+# @login_required
+# def profile():
+#     return render_template(
+#         'profile.html',
+#         content='Profile Page',
+#         facebook_conn=social.facebook.get_connection())
+
+# @application.route('/login')
+# def login():
+#     print('hello world')
+#     if current_user.is_authenticated():
+#         return redirect(request.referrer or '/')
+
+#     return render_template('login.html', form=forms.LoginForm())
 
 @application.route('/manage')
 def manage():
