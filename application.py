@@ -118,7 +118,8 @@ def create():
             location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
             description = cform.comp_description.data
             location_indb = "images/"+files.filename
-            comp_id = create_competition(title,description,amount,date,location_indb,str (session ['user_id']))
+
+            comp_id = create_competition(title,description,amount,date,location_indb,str(session ["user_id"]))
             files.save(location)
             print(cform.options)
             for f in cform.options:
@@ -131,7 +132,8 @@ def create():
                 location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
                 location_indb = "images/"+files.filename
                 print ("trial and error "+ str(cur["description"]))
-                create_option(f.description,location_indb,comp_id)
+                print('description', f.description)
+                create_option(str(cur["description"]),location_indb,comp_id)
                 files.save(location)
 
 
@@ -142,7 +144,9 @@ def create():
 
 @application.route('/view/<contest_id>')
 def view(contest_id):
-    return render_template('view.html')
+    details = competition_details(contest_id)
+    options = competition_options(contest_id)
+    return render_template('view.html', details=details, options=options)
 
 @application.route('/view/')
 def view_generic():
@@ -239,5 +243,20 @@ def retrieve_completed_comps():
     print(result)
     return result
 
+def competition_details(contest_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute("SELECT * from competitions where id={}".format(contest_id))
+    result = cursor.fetchall()
+    print(result)
+    return result
+
+def competition_options(contest_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute("SELECT * from comp_option where comp_id={}".format(contest_id))
+    result = cursor.fetchall()
+    print(result)
+    return result
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
