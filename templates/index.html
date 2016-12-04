@@ -19,7 +19,7 @@
 
       </div>
     </div>
-    <div class="parallax"><img src= {{ url_for('static', filename=featured.0.5 )}} onerror="imgError(this);"><!-- <img src="background1.jpg" alt="Unsplashed background img 1"> --></div>
+    <div class="parallax"><img src= {{ url_for('static', filename=featured.0.5 )}} onerror="imgError(this);"></div>
   </div>
 
 <div class="container recommended">
@@ -32,7 +32,7 @@
   <div class="row">
       <div class="col s12 m12 l12 recommended-holder">
         {% for comp in reco %}
-        <a href={{ url_for('view', contest_id=comp.0) }} ><img class="materialboxed col s4" src="{{url_for('static', filename=comp.5)}}"></a>
+        <a href={{ url_for('view', contest_id=comp.0) }} ><img class="materialboxed col s4" src="{{url_for('static', filename=comp.5)}}" onerror="imgError(this);"></a>
         {% endfor %}
       </div>
   </div>
