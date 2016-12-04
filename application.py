@@ -32,8 +32,9 @@ facebook = oauth.remote_app('facebook',
 def index():
     reco_comps = retrieve_reco_comps()
     featured_comp = retrieve_featured_comp()
-    print(featured_comp)
-    return render_template('index.html', featured=featured_comp)
+    print(reco_comps)
+    return render_template('index.html', featured=featured_comp,
+                           reco=reco_comps)
 
 @facebook.tokengetter
 def get_facebook_token():
@@ -119,7 +120,7 @@ def create():
                 cur = f.data
                 print (cur)
                 print ("OK" + str(file_name.name))
-                
+
                 files = request.files[file_name.name]
                 location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
                 location_indb = "images/"+files.filename
