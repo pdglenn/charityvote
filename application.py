@@ -30,6 +30,7 @@ facebook = oauth.remote_app('facebook',
 
 @application.route('/')
 def index():
+    session['previous_page'] = '/'
     reco_comps = retrieve_reco_comps()
     featured_comp = retrieve_featured_comp()
     return render_template('index.html')
