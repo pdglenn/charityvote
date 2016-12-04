@@ -4,8 +4,9 @@
         {{ form.hidden_tag() }}
         <div class="row">
             <div class="col s6 left-align">
-                <h5>Create a New Competiton</h5></div>
-            <hr>
+              <br><br>
+                <h5>Create a New Campaign</h5></div>
+
         </div>
         <div class="row">
             <div class="col s3">
@@ -31,7 +32,8 @@
                 {{form.comp_img}}
             </div>
         </div>
-
+        <div class="divider"></div>
+        <br><br>
         {%for o in form.options%}
         <div class="row">
 
@@ -52,10 +54,12 @@
         <div class="row">
 
             <div class="col s3 offset-s6">
-                <input type="submit" class="waves-effect waves-light btn blue" value="Add Option" name="add_option"></input>
+                <input type="submit" class="btn teal lighten-3" value="Add Option" name="add_option"></input>
             </div>
 
         </div>
+        <div class="divider"></div>
+        <br><br>
         <div class="row">
             <div class="col s3">
                 Amount
@@ -72,11 +76,10 @@
                 {{form.date()}}
             </div>
         </div>
-        <hr>
         <div class="row">
 
-            <div class="col s3 offset-s4">
-                <input type="submit" class="waves-effect waves-light btn blue" value="Submit" name="submit_comp"></input>
+            <div class="col s12 left-align">
+                <input type="submit" class="btn teal lighten-3" value="Submit" name="submit_comp"></input>
             </div>
 
         </div>

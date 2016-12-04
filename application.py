@@ -36,7 +36,6 @@ def index():
     featured_comp = retrieve_featured_comp()
     print("*********")
     print(featured_comp)
-    print(session['user_id'])
     return render_template('index.html', featured=featured_comp,
                            reco=reco_comps)
 

@@ -6,8 +6,9 @@
     {% else %}
     <title>VoteIt</title>
     {% endif %}
+    <link href="https://fonts.googleapis.com/css?family=Maven+Pro|Open+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
@@ -19,32 +20,25 @@
 
 <body>
     <header> {% block header %}
-        <nav class="blue">
-            <div class="navbar-wrapper container">
-                <a href="/" class="brand-logo left"><img src="{{url_for('static', filename='shaka.png')}}" alt="hangloose" style="width:30px;height:25px;">
+        <nav class="teal lighten-3">
+            <div class="navbar-wrapper container black-text">
+                <a href="/" class="brand-logo left "><img src="{{url_for('static', filename='shaka.png')}}" alt="hangloose" style="width:30px;height:25px;">
 VoteIt</a>
-
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+        <li id="logout"><a href="/logout">Sign Out</a></li>
+        </ul>
 
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-
-
-
-
+                  <li><a href="/browse">Browse</a></li>
+                  <li><a href="/create">Create</a></li>
+                  <li><a href="/manage">Manage</a></li>
 
                     {% if not session.logged_in %}
-                      <li><a href="/browse">Browse</a></li>
-                      <li><a href="/create">Create</a></li>
-                      <li><a href="/manage">Manage</a></li>
                       <li id="login"><a href="/facebook_login">Sign in</a></li>
                     {% else %}
-                      <li>Hello {{ session.user_name }}</li>
-                      <li><a href="/browse">Browse</a></li>
-                      <li><a href="/create">Create</a></li>
-                      <li><a href="/manage">Manage</a></li>
-                      <li id="logout"><a href="/logout">Sign Out</a></li>
+                      <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hello {{ session.user_name }}</a></li>
                     {% endif %}
-                    <!-- <input class=" action-button btn-flat white" id="logout-button" type="submit" value="Logout"> -->
-                    <!-- </form></li> -->
                 </ul>
             </div>
         </nav>
@@ -54,13 +48,13 @@ VoteIt</a>
     <div id="content">
         {% block content %} {% endblock %}
     </div>
-    <footer class="page-footer blue">
+    <footer class="page-footer teal lighten-3">
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
                     <h5 class="white-text">About Us</h5>
                     <p class="grey-text text-lighten-4">We think this is awesome and we hope you do too.</p>
-                    <a class="grey-text text-lighten-3" href="#!">Contact us</a>
+                    <p class="grey-text text-lighten-3">Contact <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/pauldglenn">Paul</a>, <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/mgoutam">Goutam</a>, or <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/pnadagouda">Pratik</a></p>
                 </div>
                 <div class="col l2 offset-l4 s12">
                     <h5 class="white-text">Help</h5>

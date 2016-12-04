@@ -1,35 +1,34 @@
-{% extends "base.html" %} 
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container create">
-  <div class="row">
-    <div class="col s6 left-align">
-      <h3>{{ details.0.1 }}</h3>
+    <div class="row">
+        <br><br>
+        <div class="col s6 center">
+            <h4>{{ details.0.1 }}</h4>
+            <h5>{{details.0.2}}</h5>
+            <h6>$ {{details.0.3}}</h6>
+        </div>
+        <img class="materialboxed col s4 right-align" src="{{url_for('static', filename=details.0.5)}}" onerror="imgError(this);">
     </div>
-    <div class="col s6 right-align">
-      <img class="materialboxed col s4" src="https://octodex.github.com/images/megacat.jpg">
+    <div class="row">
+      Select your favorite option and click on Vote to enter your details:
+      <form action="#">
+          {% for option in options %}
+          <p>
+              <input class="with-gap col s2" name="group1" type="radio" id="option{{loop.index}}" />
+              <label class="col s7" for="option{{loop.index}}">{{option.1}}</label>
+              <img class="materialboxed col s2 right-align" src="{{url_for('static', filename=option.2)}}" onerror="imgError(this);">
+          </p>
+          {% endfor %}
+          <div class="row">
+
+              <div class="col s12 left-align">
+                  <input type="submit" class="btn teal lighten-3" value="Vote!" name="submit_comp"></input>
+              </div>
+
+          </div>
+      </form>
     </div>
-  </div>
-  <div class="row">
-    <div class="s12">
-      <p>
-        <h5>{{ details.0.2 }}</h5>
-      </p>
-    </div>
-  </div>
-  {% for option in options %}
-  <div class="row">
-    <div class="col s3">
-      Checkbox
-    </div>
-    <div class="col s3">
-      {{ option.1 }}
-    </div>
-    <div class="col s6">
-      <img class="materialboxed" src="{{url_for('static', filename=option.2)}}"  height=200>
-    </div>
-  </div>
-  {% endfor %}
-  
-  </div>
+
+</div>
 </div>
 {% endblock %}
