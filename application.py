@@ -7,6 +7,7 @@ import uuid
 import pymysql
 import random,time
 from flask import session
+import time
 
 
 application = Flask(__name__)
@@ -86,7 +87,9 @@ def manage():
 
 @application.route('/browse')
 def browse():
-    return render_template('browse.html')
+    ongoing = retrieve_ongoing_comps()
+    completed = retrieve_completed_comps()
+    return render_template('browse.html', ongoing=ongoing, completed=completed)
 
 
 @application.route('/create',methods=['GET','POST'])
@@ -211,6 +214,25 @@ def retrieve_featured_comp():
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions ORDER BY RAND() LIMIT 1")
     result = cursor.fetchall()
+    return result
+
+def retrieve_ongoing_comps():
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    today = time.strftime('%Y-%m-%d')
+    cursor.execute("SELECT * from competitions where date >= {}".format(today))
+    result = cursor.fetchall()
+    print(result)
+    return result
+
+def retrieve_completed_comps():
+    '''This function is wet'''
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    today = time.strftime('%Y-%m-%d')
+    cursor.execute("SELECT * from competitions where date <= {}".format(today))
+    result = cursor.fetchall()
+    print(result)
     return result
 
 if __name__ == '__main__':
