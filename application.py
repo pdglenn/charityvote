@@ -34,7 +34,9 @@ def index():
     session['previous_page'] = '/'
     reco_comps = retrieve_reco_comps()
     featured_comp = retrieve_featured_comp()
-    print(reco_comps)
+    print("*********")
+    print(featured_comp)
+    print(session['user_id'])
     return render_template('index.html', featured=featured_comp,
                            reco=reco_comps)
 
@@ -116,7 +118,7 @@ def create():
             location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
             description = cform.comp_description.data
             location_indb = "images/"+files.filename
-            comp_id = create_competition(title,description,amount,date,location_indb,str (session ["user_id"]))
+            comp_id = create_competition(title,description,amount,date,location_indb,str (session ['user_id']))
             files.save(location)
             print(cform.options)
             for f in cform.options:
@@ -177,6 +179,7 @@ def create_competition (title,description,amount,expiry_date,image_url,user_id):
             print ("trying")
             id =  int(time.time()) + int(random.random())
             cursor.execute("insert into competitions(id,title,description,amount,date,image_url,user_id) values (%s,%s,%s,%s,%s,%s,%s) ",(id,title,description,amount,expiry_date,image_url,user_id))
+            # print("insert into competitions(id,title,description,amount,date,image_url,user_id) values (%s,%s,%s,%s,%s,%s,%s) ",(id,title,description,amount,expiry_date,image_url,user_id))
             flag = 0
         except pymysql.IntegrityError as e:
             print ("problem")
