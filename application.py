@@ -32,7 +32,8 @@ facebook = oauth.remote_app('facebook',
 def index():
     reco_comps = retrieve_reco_comps()
     featured_comp = retrieve_featured_comp()
-    return render_template('index.html')
+    print(featured_comp)
+    return render_template('index.html', featured=featured_comp)
 
 @facebook.tokengetter
 def get_facebook_token():
@@ -112,12 +113,13 @@ def create():
             location_indb = "images/"+files.filename
             comp_id = create_competition(title,description,amount,date,location_indb,str (session ["user_id"]))
             files.save(location)
-
+            print(cform.options)
             for f in cform.options:
                 file_name = f.image_url
                 cur = f.data
                 print (cur)
                 print ("OK" + str(file_name.name))
+                
                 files = request.files[file_name.name]
                 location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
                 location_indb = "images/"+files.filename

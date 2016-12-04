@@ -1,9 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="intro blue lighten-4 z-depth-1">
-  <h1 class="grey-text text-lighten-5">Featured Competition</h1>
+<!-- <div class="intro blue lighten-4 z-depth-1">
+
+  <img src= {{ url_for('static', filename=featured.0.5 )}} height=200 onerror="imgError(this);">
   <input class=" action-button btn-flat white" id="logout-button" type="submit" value="See more">
-</div>
+</div> -->
+
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center teal-text text-lighten-2">Featured Competition</h1>
+        
+        <div class="row center">
+          <a href={{ url_for('browse') }}><input class=" action-button btn-flat white" id="logout-button" type="submit" value="See more"></a>
+        </div>
+        <br><br>
+
+      </div>
+    </div>
+    <div class="parallax"><img src= {{ url_for('static', filename=featured.0.5 )}} onerror="imgError(this);"><!-- <img src="background1.jpg" alt="Unsplashed background img 1"> --></div>
+  </div>
 
 <div class="container recommended">
   <div class="row">
