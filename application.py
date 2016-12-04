@@ -7,6 +7,7 @@ import uuid
 import pymysql
 import random,time
 from flask import session
+import time
 
 
 application = Flask(__name__)
@@ -33,7 +34,9 @@ def index():
     session['previous_page'] = '/'
     reco_comps = retrieve_reco_comps()
     featured_comp = retrieve_featured_comp()
-    return render_template('index.html')
+    print(reco_comps)
+    return render_template('index.html', featured=featured_comp,
+                           reco=reco_comps)
 
 @facebook.tokengetter
 def get_facebook_token():
@@ -85,7 +88,9 @@ def manage():
 
 @application.route('/browse')
 def browse():
-    return render_template('browse.html')
+    ongoing = retrieve_ongoing_comps()
+    completed = retrieve_completed_comps()
+    return render_template('browse.html', ongoing=ongoing, completed=completed)
 
 
 @application.route('/create',methods=['GET','POST'])
@@ -113,12 +118,13 @@ def create():
             location_indb = "images/"+files.filename
             comp_id = create_competition(title,description,amount,date,location_indb,str (session ["user_id"]))
             files.save(location)
-
+            print(cform.options)
             for f in cform.options:
                 file_name = f.image_url
                 cur = f.data
                 print (cur)
                 print ("OK" + str(file_name.name))
+
                 files = request.files[file_name.name]
                 location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
                 location_indb = "images/"+files.filename
@@ -209,6 +215,25 @@ def retrieve_featured_comp():
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions ORDER BY RAND() LIMIT 1")
     result = cursor.fetchall()
+    return result
+
+def retrieve_ongoing_comps():
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    today = time.strftime('%Y-%m-%d')
+    cursor.execute("SELECT * from competitions where date >= {}".format(today))
+    result = cursor.fetchall()
+    print(result)
+    return result
+
+def retrieve_completed_comps():
+    '''This function is wet'''
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    today = time.strftime('%Y-%m-%d')
+    cursor.execute("SELECT * from competitions where date <= {}".format(today))
+    result = cursor.fetchall()
+    print(result)
     return result
 
 if __name__ == '__main__':
