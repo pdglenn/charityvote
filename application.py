@@ -170,10 +170,13 @@ def create_competition (title,description,amount,expiry_date,image_url,user_id):
     flag = 1
     while flag == 1:
         try:
+            print ("trying")
             id =  int(time.time()) + int(random.random())
             cursor.execute("insert into competitions(id,title,description,amount,date,image_url,user_id) values (%s,%s,%s,%s,%s,%s,%s) ",(id,title,description,amount,expiry_date,image_url,user_id))
             flag = 0
         except pymysql.IntegrityError as e:
+            print ("problem")
+            print (str (id))
             if 'PRIMARY' in e.message:
                 continue
     db.commit()

@@ -8,14 +8,7 @@ drop table if exists roles_users;
 drop table if exists role;
 drop table if exists user;
 
-create table user
-  (
-    id int Primary Key,
-    email varchar(255),
-    password varchar(255),
-    active tinyint(1),
-    confirmed_at DateTime
-  );
+
 
 create table competitions
 (
@@ -25,8 +18,8 @@ create table competitions
    amount numeric(20,0),
    date date,
    image_url varchar(200),
-   user_id int,
-   foreign key (user_id) references user(id)
+   user_id int
+   
 );
 create table comp_option
 (
@@ -38,20 +31,6 @@ create table comp_option
    foreign key (comp_id)  references competitions (id)
 );
 
-create table role
-  (
-    id int Primary Key,
-    name varchar(80),
-    description varchar(255)
-  );
-
-create table roles_users
-(
-  user_id int,
-  role_id int,
-  foreign key(user_id) references user(id),
-  foreign key(role_id) references role(id)
-);
 
 
 insert into user (id, username, password) values ("1", "fred", "fred");
