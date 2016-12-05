@@ -1,5 +1,7 @@
-from flask import Flask
+# from flask import Flask
 
-application = Flask(__name__)
-# application.config.from_object('config')
-application.config.from_pyfile('config.py', silent=True)
+# application = Flask(__name__)
+# print('CONFIGGING WOO OWO')
+# application.config.from_pyfile('config.py')
+# print('APP CONFIG PAUL', application.config)
+# # application.config.from_envvar('PROD_CONFIG', silent=True)
