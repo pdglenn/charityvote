@@ -88,6 +88,7 @@ def manage():
 def browse():
     ongoing = retrieve_ongoing_comps()
     completed = retrieve_completed_comps()
+    print('completed', completed)
     return render_template('browse.html', ongoing=ongoing, completed=completed)
 
 
@@ -224,7 +225,7 @@ def retrieve_ongoing_comps():
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
     today = time.strftime('%Y-%m-%d')
-    cursor.execute("SELECT * from competitions where date >= {}".format(today))
+    cursor.execute("SELECT * from competitions where date >= '{}'".format(today))
     result = cursor.fetchall()
     print(result)
     return result
@@ -234,7 +235,8 @@ def retrieve_completed_comps():
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
     today = time.strftime('%Y-%m-%d')
-    cursor.execute("SELECT * from competitions where date <= {}".format(today))
+    print("SELECT * from competitions where date <= '{}'".format(today))
+    cursor.execute("SELECT * from competitions where date <= '{}'".format(today))
     result = cursor.fetchall()
     print(result)
     return result
