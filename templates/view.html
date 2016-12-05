@@ -11,10 +11,10 @@
     </div>
     <div class="row">
       Select your favorite option and click on Vote to enter your details:
-      <form action="#">
+      <form action={{ url_for('order') }} method="post">
           {% for option in options %}
           <p>
-              <input class="with-gap col s2" name="group1" type="radio" id="option{{loop.index}}" />
+              <input class="with-gap col s2" name="group1" type="radio" id="option{{loop.index}}" value={{option.0}} />
               <label class="col s7" for="option{{loop.index}}">{{option.1}}</label>
               <img class="materialboxed col s2 right-align" src="{{url_for('static', filename=option.2)}}" onerror="imgError(this);">
           </p>

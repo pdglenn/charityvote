@@ -53,6 +53,9 @@ def facebook_login():
 @facebook.authorized_handler
 def facebook_authorized(resp):
     next_url = session.get('previous_page') or request.args.get('next') or url_for('index')
+    if next_url == 'order_with_id':
+        session.pop('previous_page')
+        return redirect(url_for('order_with_id', option_id=session.get('option_id')))
     if resp is None or 'access_token' not in resp:
         return redirect(next_url)
 
@@ -150,6 +153,72 @@ def view(contest_id):
 def view_generic():
     return render_template('view.html')
 
+
+@application.route('/order/', methods=['POST', 'GET'])
+def order():
+    if request.method == 'GET':
+        return redirect(url_for('browse'))
+    if not session.get('logged_in'):
+        session['previous_page'] = 'order_with_id'
+        session['option_id'] = request.form.get('group1')
+        return redirect(url_for('login_required'))
+
+    option_id = request.form.get('group1')
+    if not option_id:
+        return redirect(url_for('browse'))
+    return redirect('order_with_id', option_id=option_id)
+
+
+@application.route('/order_with_id/<option_id>', methods=['GET'])
+def order_with_id(option_id):
+    if not session.get('logged_in'):
+        session['previous_page'] = '/create'
+        return redirect(url_for('login_required'))
+    cform = forms.CreateForm()
+    if request.method =="POST":
+         if 'add_option' in request.form  :
+             optionform = forms.OptionForm()
+             optionform.description=""
+             optionform.image_url=""
+             cform.options.append_entry(optionform)
+         if 'submit_comp' in request.form :
+            print("submiting ")
+            title = cform.title.data
+            amount = cform.amount.data
+            date = cform.date.data
+
+            comp_file = cform.comp_img.data
+            files = request.files[comp_file.name]
+            location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
+            description = cform.comp_description.data
+            location_indb = "images/"+files.filename
+
+            comp_id = create_competition(title,description,amount,date,location_indb,str(session ["user_id"]))
+            files.save(location)
+            print(cform.options)
+            for f in cform.options:
+                file_name = f.image_url
+                cur = f.data
+                print (cur)
+                print ("OK" + str(file_name.name))
+
+                files = request.files[file_name.name]
+                location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
+                location_indb = "images/"+files.filename
+                print ("trial and error "+ str(cur["description"]))
+                print('description', f.description)
+                create_option(str(cur["description"]),location_indb,comp_id)
+                files.save(location)
+
+
+                print(files.filename)
+            # return redirect({{ url_for('view', contest_id=comp_id) }})
+            return redirect('/view/'+str(comp_id))
+    return render_template('create.html',form = cform)
+    
+    return option_id
+
+
 @application.route('/results/<contest_id>')
 def results(contest_id):
     return render_template('results.html')
@@ -212,7 +281,7 @@ def retrieve_reco_comps():
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions limit 3")
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def retrieve_featured_comp():
@@ -220,6 +289,7 @@ def retrieve_featured_comp():
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions ORDER BY RAND() LIMIT 1")
     result = cursor.fetchall()
+    db.close()
     return result
 
 def retrieve_ongoing_comps():
@@ -228,7 +298,7 @@ def retrieve_ongoing_comps():
     today = time.strftime('%Y-%m-%d')
     cursor.execute("SELECT * from competitions where date >= '{}'".format(today))
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def retrieve_completed_comps():
@@ -236,10 +306,9 @@ def retrieve_completed_comps():
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
     today = time.strftime('%Y-%m-%d')
-    print("SELECT * from competitions where date <= '{}'".format(today))
     cursor.execute("SELECT * from competitions where date <= '{}'".format(today))
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def competition_details(contest_id):
@@ -247,7 +316,7 @@ def competition_details(contest_id):
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions where id={}".format(contest_id))
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def competition_options(contest_id):
@@ -255,7 +324,16 @@ def competition_options(contest_id):
     cursor = db.cursor()
     cursor.execute("SELECT * from comp_option where comp_id={}".format(contest_id))
     result = cursor.fetchall()
-    print(result)
+    db.close()
+    return result
+
+
+def one_competition_option(comp_option_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute("SELECT * from comp_option where id={}".format(contest_id))
+    result = cursor.fetchall()
+    db.close()
     return result
 
 if __name__ == '__main__':
