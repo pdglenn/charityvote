@@ -14,7 +14,7 @@ application = Flask(__name__)
 application.debug = True
 application.secret_key = ('you_wont_guess')
 
-application.config.from_pyfile('config.py', silent=True)
+application.config.from_pyfile('.ebextensions/config.py', silent=True)
 
 oauth = OAuth()
 
