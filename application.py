@@ -137,7 +137,8 @@ def create():
 
 
                 print(files.filename)
-
+            # return redirect({{ url_for('view', contest_id=comp_id) }})
+            return redirect('/view/'+str(comp_id))
     return render_template('create.html',form = cform)
 
 
