@@ -1,40 +1,42 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
+
+<!-- dummy page for manage your campaigns. Not in use right now -->
 <div class="container browse">
-  <br><br>
-  <h5 class="col s6 left-align">Your Profile</h5>
-
-
-<table class = "striped">
+    <br><br>
+    <h5 class="col s6 left-align">Your Profile</h5>
+    <table class="striped">
         <thead>
-          <tr>
-              <th data-field="id">Campaign</th>
-              <th data-field="name">Total Collected</th>
-              <th data-field="name">Expiry Date</th>
+            <tr>
+                <th data-field="id">Campaign</th>
+                <th data-field="name">Total Collected</th>
+                <th data-field="name">Expiry Date</th>
 
-          </tr>
+            </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td>Alvin</td>
-            <td>200$</td>
-            <td>03/11/2016</td>
-            <td><input type="submit"  class="btn-flat teal lighten-3 white-text" value ="View" name =""></input></td>
-          </tr>
-          <tr>
-            <td>Alan</td>
-            <td>300$</td>
-            <td>03/11/2016</td>
-            <td><input type="submit"  class="btn-flat teal lighten-3 white-text" value ="View" name =""></input></td>
-          </tr>
-          <tr>
-            <td>Jonathan</td>
-            <td>400$</td>
-            <td>02/11/2016</td>
-            <td><input type="submit"  class="btn-flat teal lighten-3 white-text" value ="View" name =""></input></td>
-          </tr>
+            <tr>
+                <td>Alvin</td>
+                <td>200$</td>
+                <td>03/11/2016</td>
+                <td><input type="submit" class="btn-flat teal lighten-3 white-text" value="View" name=""></input>
+                </td>
+            </tr>
+            <tr>
+                <td>Alan</td>
+                <td>300$</td>
+                <td>03/11/2016</td>
+                <td><input type="submit" class="btn-flat teal lighten-3 white-text" value="View" name=""></input>
+                </td>
+            </tr>
+            <tr>
+                <td>Jonathan</td>
+                <td>400$</td>
+                <td>02/11/2016</td>
+                <td><input type="submit" class="btn-flat teal lighten-3 white-text" value="View" name=""></input>
+                </td>
+            </tr>
         </tbody>
-      </table>
+    </table>
 </div>
 {% endblock %}

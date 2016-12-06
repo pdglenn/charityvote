@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
+<!-- Home page that displays a feature campaign on the banner and a recommended list of three campaigns. Allows the user to see more -->
 <div id="index-banner" class="parallax-container">
     <div class="section no-pad-bot">
         <div class="container">
@@ -7,7 +8,7 @@
             <h1 class="header center white-text">Featured Campaign</h1>
 
             <div class="row center">
-              <h3 class="center white-text">{{featured.0.1}}</h3>
+                <h3 class="center white-text">{{featured.0.1}}</h3>
                 <a href={{ url_for( 'view', contest_id=featured.0.0) }}><input class="btn-flat teal lighten-3 white-text" id="logout-button" type="submit" value="See more"></a>
             </div>
             <br><br>
@@ -45,13 +46,13 @@
             <a href={{ url_for( 'view', contest_id=comp.0) }}>
 
                 <div class="parallax-container col s12 m6 l4">
-                  <div class="recos">
-                    <h4 class="title white-text">{{comp.1}}</h4>
-                      <div class="hover-opacity">
-                        <div class="parallax">
-                            <img class="responsive-img" src="{{url_for('static', filename=comp.5)}}" onerror="imgError(this);">
+                    <div class="recos">
+                        <h4 class="title white-text">{{comp.1}}</h4>
+                        <div class="hover-opacity">
+                            <div class="parallax">
+                                <img class="responsive-img" src="{{url_for('static', filename=comp.5)}}" onerror="imgError(this);">
+                            </div>
                         </div>
-                      </div>
 
                     </div>
 

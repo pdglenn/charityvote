@@ -3,6 +3,8 @@ use charityvote;
 drop table if exists comp_option;
 drop table if exists competitions;
 drop table if exists orders;
+
+-- stores each campaign
 create table competitions
 (
    id int Primary key,
@@ -14,6 +16,8 @@ create table competitions
    user_id varchar(30)
 
 );
+
+-- stores the options for each campaign and references the campaign id
 create table comp_option
 (
    id int Primary Key,
@@ -24,8 +28,10 @@ create table comp_option
    foreign key (comp_id)  references competitions (id)
 );
 
+-- initial dummy value
 insert into competitions VALUES (1, 'Initial Competition', 'Initial Competition', 200, '2015-01-01', 'static/test.jpg', '1');
 
+-- stores orders for options as voted by users
 create table orders
 (
    id int primary key,

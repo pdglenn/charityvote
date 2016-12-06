@@ -9,6 +9,7 @@ $(document).ready(function() {
 
 });
 
+// default image when not available
 function imgError(image) {
     image.onerror = "";
     image.src = "https://octodex.github.com/images/megacat.jpg";
