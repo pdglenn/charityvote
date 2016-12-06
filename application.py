@@ -47,12 +47,15 @@ def pop_login_session():
 @application.route("/facebook_login")
 def facebook_login():
     return facebook.authorize(callback=url_for('facebook_authorized',
-        next=request.args.get('next'), _external=True))
+        next=request.args.get('referrer'), _external=True))
 
 @application.route("/facebook_authorized")
 @facebook.authorized_handler
 def facebook_authorized(resp):
-    next_url = session.get('previous_page') or request.args.get('next') or url_for('index')
+    next_url = session.get('previous_page') or request.args.get('referrer') or url_for('index')
+    if next_url == 'view':
+        session.pop('previous_page')
+        next_url = url_for('view', contest_id=session.pop('contest_id'))
     if resp is None or 'access_token' not in resp:
         return redirect(next_url)
 
@@ -150,6 +153,40 @@ def view(contest_id):
 def view_generic():
     return render_template('view.html')
 
+
+@application.route('/order/', methods=['POST', 'GET'])
+def order():
+    if request.method == 'GET':
+        return redirect(url_for('browse'))
+    if not session.get('logged_in'):
+        session['previous_page'] = 'view'
+        session['contest_id'] = request.referrer.split('/')[-1]
+        return redirect(url_for('login_required'))
+
+    option_id = request.form.get('group1')
+    if not option_id:
+        return redirect(url_for('browse'))
+    return redirect(url_for('order_with_id', option_id=option_id))
+
+@application.route('/order_with_id')
+def order_without_id():
+    return redirect(url_for('browse'))
+
+
+@application.route('/order_with_id/<option_id>', methods=['GET', 'POST'])
+def order_with_id(option_id):
+    if option_id == 1:
+        return redirect(url_for('browse'))
+    option_details = one_competition_option(option_id)[0]
+    details = competition_details(option_details[3])
+    form = forms.OrderForm()
+    return render_template('order.html', option_details=option_details, 
+                           competition_details=details, form=form)
+
+@application.route('/place_order', methods=['POST'])
+def place_order():
+    return 'hello world'
+
 @application.route('/results/<contest_id>')
 def results(contest_id):
     return render_template('results.html')
@@ -212,7 +249,7 @@ def retrieve_reco_comps():
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions limit 3")
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def retrieve_featured_comp():
@@ -220,6 +257,7 @@ def retrieve_featured_comp():
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions ORDER BY RAND() LIMIT 1")
     result = cursor.fetchall()
+    db.close()
     return result
 
 def retrieve_ongoing_comps():
@@ -228,7 +266,7 @@ def retrieve_ongoing_comps():
     today = time.strftime('%Y-%m-%d')
     cursor.execute("SELECT * from competitions where date >= '{}'".format(today))
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def retrieve_completed_comps():
@@ -236,10 +274,9 @@ def retrieve_completed_comps():
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
     today = time.strftime('%Y-%m-%d')
-    print("SELECT * from competitions where date <= '{}'".format(today))
     cursor.execute("SELECT * from competitions where date <= '{}'".format(today))
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def competition_details(contest_id):
@@ -247,7 +284,7 @@ def competition_details(contest_id):
     cursor = db.cursor()
     cursor.execute("SELECT * from competitions where id={}".format(contest_id))
     result = cursor.fetchall()
-    print(result)
+    db.close()
     return result
 
 def competition_options(contest_id):
@@ -255,7 +292,16 @@ def competition_options(contest_id):
     cursor = db.cursor()
     cursor.execute("SELECT * from comp_option where comp_id={}".format(contest_id))
     result = cursor.fetchall()
-    print(result)
+    db.close()
+    return result
+
+
+def one_competition_option(comp_option_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute("SELECT * from comp_option where id={}".format(comp_option_id))
+    result = cursor.fetchall()
+    db.close()
     return result
 
 if __name__ == '__main__':

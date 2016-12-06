@@ -15,7 +15,15 @@ class CreateForm(Form):
     date = DateField('expiry', validators=[DataRequired()],format='%Y-%m-%d')
     options = FieldList(FormField(OptionForm),min_entries = 1)
     
-
+class OrderForm(Form):
+    name = StringField('name', validators=[DataRequired()])
+    address = StringField('address', validators=[DataRequired()])
+    city = StringField('city', validators=[DataRequired()])
+    state = StringField('state',validators =[DataRequired()])
+    zip_code = StringField('zip_code',validators =[DataRequired()])
+    billing_name = StringField('billing_name',validators =[DataRequired()])
+    credit_card_number = StringField('credit_card_number',validators =[DataRequired()])
+    
 
 # class OrdersForm(Form):
 # 	name_of_part = StringField('name of part', validators=[DataRequired()])
