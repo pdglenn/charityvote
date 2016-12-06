@@ -18,6 +18,7 @@
               <label class="col s7" for="option{{loop.index}}">{{option.1}}</label>
               <img class="materialboxed col s2 right-align" src="{{url_for('static', filename=option.2)}}" onerror="imgError(this);">
           </p>
+          <div class="row"></div>
           {% endfor %}
           <div class="row">
 

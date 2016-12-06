@@ -1,11 +1,11 @@
-$(document).ready(function(){
-  $('.materialboxed').materialbox();
-
-  $(".dropdown-button").dropdown({
-    belowOrigin: true,
-    hover: true,
-    alignment: 'bottom'
-  });
+$(document).ready(function() {
+    $('.materialboxed').materialbox();
+    $(".button-collapse").sideNav();
+    $(".dropdown-button").dropdown({
+        belowOrigin: true,
+        hover: true,
+        alignment: 'bottom'
+    });
 
 });
 

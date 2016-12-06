@@ -22,24 +22,39 @@
     <header> {% block header %}
         <nav class="teal lighten-3">
             <div class="navbar-wrapper container black-text">
-                <a href="/" class="brand-logo left "><img src="{{url_for('static', filename='shaka.png')}}" alt="hangloose" style="width:30px;height:25px;">
-VoteIt</a>
-        <!-- Dropdown Structure -->
-        <ul id="dropdown1" class="dropdown-content">
-        <li id="logout"><a href="/logout">Sign Out</a></li>
-        </ul>
-
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <a href="/" class="brand-logo left hide-on-med-and-down"><img src="{{url_for('static', filename='shaka.png')}}" alt="hangloose" style="width:30px;height:25px;"> VoteIt
+                </a>
+                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                <a href="/" class="brand-logo right hide-on-large-only"><img src="{{url_for('static', filename='shaka.png')}}" alt="hangloose" style="width:30px;height:25px;"> VoteIt
+                </a>
+                <ul class="right hide-on-med-and-down">
                   <li><a href="/browse">Browse</a></li>
                   <li><a href="/create">Create</a></li>
-                  <li><a href="/manage">Manage</a></li>
-
-                    {% if not session.logged_in %}
-                      <li id="login"><a href="/facebook_login">Sign in</a></li>
-                    {% else %}
-                      <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hello {{ session.user_name }}</a></li>
-                    {% endif %}
+                  {% if not session.logged_in %}
+                  <li id="login"><a href="/facebook_login">Sign in</a></li>
+                  {% else %}
+                  <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hello {{ session.user_name }}</a></li>
+                  {% endif %}
                 </ul>
+
+                <ul class="side-nav" id="mobile-demo">
+                  {% if not session.logged_in %}
+                  <li id="login"><a href="/facebook_login">Sign in</a></li>
+                  {% else %}
+                  <li>Hello {{ session.user_name }}</li>
+                  {% endif %}
+                  <li id="logout"><a href="/logout">Sign Out</a></li>
+                  <li><a href="/manage">Manage</a></li>
+                  <li><a href="/browse">Browse</a></li>
+                  <li><a href="/create">Create</a></li>
+
+                </ul>
+                <!-- Dropdown Structure -->
+                <ul id="dropdown1" class="dropdown-content">
+                    <li><a href="/manage">Manage</a></li>
+                    <li id="logout"><a href="/logout">Sign Out</a></li>
+                </ul>
+
             </div>
         </nav>
 
@@ -54,7 +69,8 @@ VoteIt</a>
                 <div class="col l6 s12">
                     <h5 class="white-text">About Us</h5>
                     <p class="grey-text text-lighten-4">We think this is awesome and we hope you do too.</p>
-                    <p class="grey-text text-lighten-3">Contact <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/pauldglenn">Paul</a>, <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/mgoutam">Goutam</a>, or <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/pnadagouda">Pratik</a></p>
+                    <p class="grey-text text-lighten-3">Contact <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/pauldglenn">Paul</a>, <a class="white-text" target="_newtab" href="https://www.linkedin.com/in/mgoutam">Goutam</a>, or <a class="white-text" target="_newtab"
+                            href="https://www.linkedin.com/in/pnadagouda">Pratik</a></p>
                 </div>
                 <div class="col l2 offset-l4 s12">
                     <h5 class="white-text">Help</h5>
@@ -69,7 +85,7 @@ VoteIt</a>
         <div class="footer-copyright">
             <div class="container">
                 © 2016 PGP
-                <a class="grey-text text-lighten-4 right" href="#!">Social Media Links</a>
+
             </div>
         </div>
     </footer>

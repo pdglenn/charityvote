@@ -18,18 +18,29 @@
   </div>
 <br><br>
 <div class="container recommended">
+<div class="row">
+  <div class="col s3">
+
+  </div>
+  <div class="col s6">
+    Browse through campaigns created for new product ideas or designs.
+    Vote for your favorite option in a campaign to help it reach its target. At the end of the campaign, the
+    option with the most votes will win. And you will reap the benefits of your investment!
+  </div>
+
+</div>
+
   <div class="row">
     <div class="col s6 left-align"><h5>Recommended for you</h5></div>
     <div class="col s6 right-align">
       <a href={{ url_for('browse') }}><input class="btn-flat teal lighten-3 white-text" id="logout-button" type="submit" value="See all"></a></div>
   </div>
-  <hr>
   <div class="row">
       <div class="col s12 m12 l12 recommended-holder">
         {% for comp in reco %}
 
         <a href={{ url_for('view', contest_id=comp.0) }} >
-          <div class="parallax-container col s4">
+          <div class="parallax-container col s12 m6 l4">
               <h4 class="title teal-text text-darken-3">{{comp.1}}</h4>
               <div class="recos">
                 <div class="parallax">
