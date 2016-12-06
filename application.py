@@ -47,15 +47,15 @@ def pop_login_session():
 @application.route("/facebook_login")
 def facebook_login():
     return facebook.authorize(callback=url_for('facebook_authorized',
-        next=request.args.get('next'), _external=True))
+        next=request.args.get('referrer'), _external=True))
 
 @application.route("/facebook_authorized")
 @facebook.authorized_handler
 def facebook_authorized(resp):
-    next_url = session.get('previous_page') or request.args.get('next') or url_for('index')
-    if next_url == 'order_with_id':
+    next_url = session.get('previous_page') or request.args.get('referrer') or url_for('index')
+    if next_url == 'view':
         session.pop('previous_page')
-        return redirect(url_for('order_with_id', option_id=session.get('option_id')))
+        next_url = url_for('view', contest_id=session.pop('contest_id'))
     if resp is None or 'access_token' not in resp:
         return redirect(next_url)
 
@@ -159,65 +159,33 @@ def order():
     if request.method == 'GET':
         return redirect(url_for('browse'))
     if not session.get('logged_in'):
-        session['previous_page'] = 'order_with_id'
-        session['option_id'] = request.form.get('group1')
+        session['previous_page'] = 'view'
+        session['contest_id'] = request.referrer.split('/')[-1]
         return redirect(url_for('login_required'))
 
     option_id = request.form.get('group1')
     if not option_id:
         return redirect(url_for('browse'))
-    return redirect('order_with_id', option_id=option_id)
+    return redirect(url_for('order_with_id', option_id=option_id))
+
+@application.route('/order_with_id')
+def order_without_id():
+    return redirect(url_for('browse'))
 
 
-@application.route('/order_with_id/<option_id>', methods=['GET'])
+@application.route('/order_with_id/<option_id>', methods=['GET', 'POST'])
 def order_with_id(option_id):
-    if not session.get('logged_in'):
-        session['previous_page'] = '/create'
-        return redirect(url_for('login_required'))
-    cform = forms.CreateForm()
-    if request.method =="POST":
-         if 'add_option' in request.form  :
-             optionform = forms.OptionForm()
-             optionform.description=""
-             optionform.image_url=""
-             cform.options.append_entry(optionform)
-         if 'submit_comp' in request.form :
-            print("submiting ")
-            title = cform.title.data
-            amount = cform.amount.data
-            date = cform.date.data
+    if option_id == 1:
+        return redirect(url_for('browse'))
+    option_details = one_competition_option(option_id)[0]
+    details = competition_details(option_details[3])
+    form = forms.OrderForm()
+    return render_template('order.html', option_details=option_details, 
+                           competition_details=details, form=form)
 
-            comp_file = cform.comp_img.data
-            files = request.files[comp_file.name]
-            location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
-            description = cform.comp_description.data
-            location_indb = "images/"+files.filename
-
-            comp_id = create_competition(title,description,amount,date,location_indb,str(session ["user_id"]))
-            files.save(location)
-            print(cform.options)
-            for f in cform.options:
-                file_name = f.image_url
-                cur = f.data
-                print (cur)
-                print ("OK" + str(file_name.name))
-
-                files = request.files[file_name.name]
-                location = os.path.join(application.config['UPLOAD_FOLDER'],files.filename)
-                location_indb = "images/"+files.filename
-                print ("trial and error "+ str(cur["description"]))
-                print('description', f.description)
-                create_option(str(cur["description"]),location_indb,comp_id)
-                files.save(location)
-
-
-                print(files.filename)
-            # return redirect({{ url_for('view', contest_id=comp_id) }})
-            return redirect('/view/'+str(comp_id))
-    return render_template('create.html',form = cform)
-    
-    return option_id
-
+@application.route('/place_order', methods=['POST'])
+def place_order():
+    return 'hello world'
 
 @application.route('/results/<contest_id>')
 def results(contest_id):
@@ -331,7 +299,7 @@ def competition_options(contest_id):
 def one_competition_option(comp_option_id):
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
-    cursor.execute("SELECT * from comp_option where id={}".format(contest_id))
+    cursor.execute("SELECT * from comp_option where id={}".format(comp_option_id))
     result = cursor.fetchall()
     db.close()
     return result
