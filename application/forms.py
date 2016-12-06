@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import StringField, IntegerField,SelectField,FormField,BooleanField,FieldList,FileField
+from wtforms import StringField, IntegerField,SelectField,FormField,BooleanField,FieldList,FileField, HiddenField
 from flask_wtf.html5 import EmailField,DateField
 from wtforms.validators import DataRequired
 class OptionForm(Form):
@@ -23,6 +23,8 @@ class OrderForm(Form):
     zip_code = StringField('zip_code',validators =[DataRequired()])
     billing_name = StringField('billing_name',validators =[DataRequired()])
     credit_card_number = StringField('credit_card_number',validators =[DataRequired()])
+    competition_id = HiddenField('competition_id')
+    option_id = HiddenField('option_id')
     
 
 # class OrdersForm(Form):
