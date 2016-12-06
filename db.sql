@@ -2,7 +2,7 @@
 use charityvote;
 drop table if exists comp_option;
 drop table if exists competitions;
-
+drop table if exists orders;
 create table competitions
 (
    id int Primary key,
@@ -23,6 +23,8 @@ create table comp_option
    votes int,
    foreign key (comp_id)  references competitions (id)
 );
+
+insert into competitions VALUES (1, 'Initial Competition', 'Initial Competition', 200, '2015-01-01', 'static/test.jpg', '1');
 
 create table orders
 (
