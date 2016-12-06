@@ -8,6 +8,7 @@ import pymysql
 import random,time
 from flask import session
 import time
+from datetime import date
 
 
 application = Flask(__name__)
@@ -147,7 +148,8 @@ def create():
 def view(contest_id):
     details = competition_details(contest_id)
     options = competition_options(contest_id)
-    return render_template('view.html', details=details, options=options)
+    completed = details[0][4] < date.today()
+    return render_template('view.html', details=details, options=options, completed=completed)
 
 @application.route('/view/')
 def view_generic():
