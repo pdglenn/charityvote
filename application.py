@@ -179,13 +179,35 @@ def order_with_id(option_id):
         return redirect(url_for('browse'))
     option_details = one_competition_option(option_id)[0]
     details = competition_details(option_details[3])
-    form = forms.OrderForm()
+    form = forms.OrderForm(competition_id=option_details[3],
+                           option_id=option_details[0])
     return render_template('order.html', option_details=option_details, 
                            competition_details=details, form=form)
 
 @application.route('/place_order', methods=['POST'])
 def place_order():
-    return 'hello world'
+    name = request.form['name']
+    address = request.form['address']
+    city = request.form['city']
+    state = request.form['state']
+    zip_code = request.form['zip_code']
+    billing_name = request.form['zip_code']
+    credit_card_number = request.form['credit_card_number']
+    competition_id = request.form['competition_id']
+    option_id = request.form['option_id']
+
+    add_order(name, address, city, state, zip_code,
+              billing_name, credit_card_number,
+              competition_id, option_id)
+
+    add_vote(option_id)
+
+    option_votes = get_total_votes_for_id(option_id)
+    competition_votes = get_total_votes_for_competition(competition_id)
+    competition_end_date = get_competition_end_date(competition_id)
+
+
+    return render_template('success.html', option_votes=option_votes, total_votes=competition_votes, competition_end_date=competition_end_date)
 
 @application.route('/results/<contest_id>')
 def results(contest_id):
@@ -303,6 +325,69 @@ def one_competition_option(comp_option_id):
     result = cursor.fetchall()
     db.close()
     return result
+
+
+def add_order(name, address, city, state, zip_code,
+              billing_name, credit_card_number,
+              competition_id, option_id):
+
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    print( (name, address, city, state, zip_code,
+                   billing_name, credit_card_number,
+                   competition_id, option_id) )
+    cursor = db.cursor()
+    flag = 1
+    while flag ==1:
+        try:
+            id =  int(time.time()) + int(random.random())
+            cursor.execute("""INSERT INTO orders (id, name, address, city, state, zip_code,
+                   billing_name, credit_card_number, competition_id, option_id)
+                   VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                  (id,name, address, city, state, zip_code,
+                   billing_name, credit_card_number,
+                   competition_id, option_id))
+            flag = 0
+        except pymysql.IntegrityError as e:
+            if 'PRIMARY' in e.message:
+                continue
+
+    db.commit()
+    db.close()
+
+def add_vote(option_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute('UPDATE comp_option SET votes = votes + 1 WHERE id = %s', (option_id,))
+    db.commit()
+    db.close()
+
+
+def get_total_votes_for_id(option_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute('SELECT votes FROM comp_option WHERE id = %s', (option_id,))
+    result = cursor.fetchall()
+    db.close()
+    return result[0][0]
+
+
+def get_total_votes_for_competition(competition_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute('SELECT sum(votes) FROM comp_option WHERE comp_id = %s', (competition_id,))
+    result = cursor.fetchall()
+    db.close()
+    return result[0][0]
+    
+def get_competition_end_date(competition_id):
+    db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
+    cursor = db.cursor()
+    cursor.execute('SELECT date from competitions WHERE id = {}'.format(competition_id))
+    result = cursor.fetchall()
+    db.close()
+    return result[0][0]  
+
+
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')

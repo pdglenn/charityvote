@@ -23,3 +23,17 @@ create table comp_option
    votes int,
    foreign key (comp_id)  references competitions (id)
 );
+
+create table orders
+(
+   id int primary key,
+   name varchar(200),
+   address varchar(200),
+   city varchar(200),
+   state varchar(200),
+   zip_code varchar(200),
+   billing_name varchar(200),
+   credit_card_number varchar(200),
+   competition_id varchar(200),
+   option_id varchar(200)
+);
