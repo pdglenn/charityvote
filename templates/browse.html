@@ -11,7 +11,7 @@
       <div class="col s12 m12 l12 ongoing">
         {% for comp in ongoing %}
         <a href={{ url_for('view', contest_id=comp.0) }} >
-          <div class="parallax-container col s4">
+          <div class="parallax-container col s12 m6 l4">
               <h4 class="title teal-text text-darken-3">{{comp.1}}</h4>
               <div class="recos">
                 <div class="parallax">

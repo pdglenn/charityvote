@@ -9,8 +9,12 @@
         </div>
         <img class="materialboxed col s4 right-align" src="{{url_for('static', filename=details.0.5)}}" onerror="imgError(this);">
     </div>
+    <div class="divider">
+    </div>
+    <br>
     <div class="row">
-      Select your favorite option and click on Vote to enter your details:
+      Select your favorite option from the choices below. Each option costs the same, but your vote
+      can help your choice win the campaign. Click on Vote at the bottom to enter your details:
       <form action={{ url_for('order') }} method="post">
           {% for option in options %}
           <p>
@@ -18,6 +22,7 @@
               <label class="col s7" for="option{{loop.index}}">{{option.1}}</label>
               <img class="materialboxed col s2 right-align" src="{{url_for('static', filename=option.2)}}" onerror="imgError(this);">
           </p>
+          <div class="row"></div>
           {% endfor %}
           <div class="row">
 

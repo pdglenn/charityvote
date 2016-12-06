@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="container Recommended">
+  <br><br>
+  <div class="row">
+    <div class="col s12 center"><h5>Success!</h5></div>
+
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col s3">
+
+    </div>
+    <div class="col s6 center">
+      Congratulations and thank you for your vote.
+      <br>
+      Your choice has received {{option_votes}} so far out of {{total_votes}} total votes.
+      <br>
+      You will be notified of the winner on {{competition_end_date}} when the campaign ends.
+      <br>
+      <a href={{ url_for('index') }}><input class="btn teal lighten-3" id="home" type="submit" value="Back to Home"></a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,11 +1,18 @@
-/*body, html
-{
-    background-color: #EDEDED !important;
-}*/
 
 html {
     font-family: 'Maven Pro', 'Open Sans', sans-serif;
   }
+
+
+  body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+  main {
+      flex: 1 0 auto;
+    }
 
 .parallax img{
   display: inline;
