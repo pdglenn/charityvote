@@ -1,7 +1,8 @@
 from flask_wtf import Form
-from wtforms import StringField, IntegerField,SelectField,FormField,BooleanField,FieldList,FileField, HiddenField
-from flask_wtf.html5 import EmailField,DateField
+from wtforms import StringField, FileField, HiddenField
+from flask_wtf.html5 import EmailField, DateField
 from wtforms.validators import DataRequired
+
 class OptionForm(Form):
     description = StringField('description', validators=[DataRequired()])
     image_url = FileField('image',validators =[DataRequired()])
