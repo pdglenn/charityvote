@@ -16,8 +16,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
 
-    <!-- <link rel="stylesheet" href="_css/style.css"> -->
 </head>
+
+<!-- contains nav bar header which has logo, navigation links, dropdown menu. which all switches to sidebar on resizing
+because responsive design -->
 
 <body>
     <header> {% block header %}
@@ -29,25 +31,25 @@
                 <a href="/" class="brand-logo right hide-on-large-only"><img src="{{url_for('static', filename='shaka.png')}}" alt="hangloose" style="width:30px;height:25px;"> VoteIt
                 </a>
                 <ul class="right hide-on-med-and-down">
-                  <li><a href="/browse">Browse</a></li>
-                  <li><a href="/create">Create</a></li>
-                  {% if not session.logged_in %}
-                  <li id="login"><a href="/facebook_login">Sign in</a></li>
-                  {% else %}
-                  <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hello {{ session.user_name }}</a></li>
-                  {% endif %}
+                    <li><a href="/browse">Browse</a></li>
+                    <li><a href="/create">Create</a></li>
+                    {% if not session.logged_in %}
+                    <li id="login"><a href="/facebook_login">Sign in</a></li>
+                    {% else %}
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hello {{ session.user_name }}</a></li>
+                    {% endif %}
                 </ul>
 
                 <ul class="side-nav" id="mobile-demo">
-                  {% if not session.logged_in %}
-                  <li id="login"><a href="/facebook_login">Sign in</a></li>
-                  {% else %}
-                  <li>Hello {{ session.user_name }}</li>
-                  {% endif %}
-                  <li id="logout"><a href="/logout">Sign Out</a></li>
-                  <!-- <li><a href="/manage">Manage</a></li> -->
-                  <li><a href="/browse">Browse</a></li>
-                  <li><a href="/create">Create</a></li>
+                    {% if not session.logged_in %}
+                    <li id="login"><a href="/facebook_login">Sign in</a></li>
+                    {% else %}
+                    <li>Hello {{ session.user_name }}</li>
+                    {% endif %}
+                    <li id="logout"><a href="/logout">Sign Out</a></li>
+                    <!-- <li><a href="/manage">Manage</a></li> -->
+                    <li><a href="/browse">Browse</a></li>
+                    <li><a href="/create">Create</a></li>
 
                 </ul>
                 <!-- Dropdown Structure -->
@@ -62,11 +64,12 @@
         {% endblock %}
     </header>
     <main>
-      <div id="content">
-          {% block content %} {% endblock %}
-      </div>
+        <div id="content">
+            {% block content %} {% endblock %}
+        </div>
     </main>
 
+    <!-- standard footer contains contact links and nice design -->
     <footer class="page-footer teal lighten-3">
         <div class="container">
             <div class="row">

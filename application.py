@@ -191,7 +191,7 @@ def order_with_id(option_id):
     details = competition_details(option_details[3])
     form = forms.OrderForm(competition_id=option_details[3],
                            option_id=option_details[0])
-    return render_template('order.html', option_details=option_details, 
+    return render_template('order.html', option_details=option_details,
                            competition_details=details, form=form)
 
 @application.route('/place_order', methods=['POST'])
@@ -222,7 +222,6 @@ def place_order():
 
     return render_template('success.html', option_votes=option_votes, total_votes=competition_votes, competition_end_date=competition_end_date)
 
-
 ######################################
 # Everything down here should be in a models.py file, but we were never able to
 # Find the pattern to get config variables from the application into that file
@@ -232,6 +231,7 @@ def place_order():
 # An ORM would certainly have been a better idea, but there was some...
 # ...disagreement in the group about that.
 # Forgive the code below.
+
 
 host = application.config['SQL_HOST']
 port = 3306
@@ -386,14 +386,14 @@ def get_total_votes_for_competition(competition_id):
     result = cursor.fetchall()
     db.close()
     return result[0][0]
-    
+
 def get_competition_end_date(competition_id):
     db = pymysql.connect(host=host,user = username,passwd=password,db="charityvote",port=port)
     cursor = db.cursor()
     cursor.execute('SELECT date from competitions WHERE id = {}'.format(competition_id))
     result = cursor.fetchall()
     db.close()
-    return result[0][0]  
+    return result[0][0]
 
 
 

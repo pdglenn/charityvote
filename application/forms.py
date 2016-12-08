@@ -6,16 +6,17 @@ from wtforms.validators import DataRequired
 class OptionForm(Form):
     description = StringField('description', validators=[DataRequired()])
     image_url = FileField('image',validators =[DataRequired()])
-    
+
+# form for creating a campaign
 class CreateForm(Form):
-    
     title = StringField('title', validators=[DataRequired()])
     comp_description = StringField('title', validators=[DataRequired()])
     amount = StringField('amount', validators=[DataRequired()])
     comp_img = FileField('image',validators =[DataRequired()])
     date = DateField('expiry', validators=[DataRequired()],format='%Y-%m-%d')
     options = FieldList(FormField(OptionForm),min_entries = 1)
-    
+
+# form for voting and creating an order
 class OrderForm(Form):
     name = StringField('name', validators=[DataRequired()])
     address = StringField('address', validators=[DataRequired()])
@@ -26,9 +27,3 @@ class OrderForm(Form):
     credit_card_number = StringField('credit_card_number',validators =[DataRequired()])
     competition_id = HiddenField('competition_id')
     option_id = HiddenField('option_id')
-    
-
-# class OrdersForm(Form):
-# 	name_of_part = StringField('name of part', validators=[DataRequired()])
-# 	manufacturer_of_part = StringField('manufacturer of part', validators=[DataRequired()])
-	

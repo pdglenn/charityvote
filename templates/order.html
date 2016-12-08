@@ -1,4 +1,6 @@
 {% extends "base.html" %} {% block content %}
+
+<!-- Page that asks user to enter in payment details, which are stored in the database -->
 <div class="container create">
     <div class="row">
         <br><br>
@@ -10,79 +12,77 @@
         <img class="materialboxed col s4 right-align" src="{{url_for('static', filename=option_details.2)}}" onerror="imgError(this);">
     </div>
     <div class="row">
-      <p>
-        <br>
-        You've chosen to vote for {{option_details.1}}!<br>
-        Enter your shipping and payment details below to confirm your vote.<br>
-        When the competition ends on {{ competition_details.0.4 }}, you'll be notified and receive the design that garnered the most votes.<br>
-      </p>
+        <p>
+            <br> You've chosen to vote for {{option_details.1}}!<br> Enter your shipping and payment details below to confirm your vote.<br> When the competition ends on {{ competition_details.0.4 }}, you'll be notified and receive the design that garnered
+            the most votes.<br>
+        </p>
     </div>
 
-    <form action={{ url_for('place_order') }} method='post'>
-    <div class="row">
-      <div class="col s3">
-          Name
-      </div>
-      <div class="col s3">
-          {{form.name(size=120)}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s3">
-        Address
-      </div>
-      <div class="col s3">
-          {{form.address(size=120)}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s3">
-          City
-      </div>
-      <div class="col s3">
-          {{form.city}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s3">
-          State
-      </div>
-      <div class="col s3">
-          {{form.state}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s3">
-          Zip Code
-      </div>
-      <div class="col s3">
-          {{form.zip_code}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s3">
-          Name on Payment Method
-      </div>
-      <div class="col s3">
-          {{form.billing_name}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s3">
-          Credit Card Number
-      </div>
-      <div class="col s3">
-          {{form.credit_card_number}}
-      </div>
-    </div>
+    <form action={{ url_for( 'place_order') }} method='post'>
+        <div class="row">
+            <div class="col s3">
+                Name
+            </div>
+            <div class="col s3">
+                {{form.name(size=120)}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                Address
+            </div>
+            <div class="col s3">
+                {{form.address(size=120)}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                City
+            </div>
+            <div class="col s3">
+                {{form.city}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                State
+            </div>
+            <div class="col s3">
+                {{form.state}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                Zip Code
+            </div>
+            <div class="col s3">
+                {{form.zip_code}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                Name on Payment Method
+            </div>
+            <div class="col s3">
+                {{form.billing_name}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                Credit Card Number
+            </div>
+            <div class="col s3">
+                {{form.credit_card_number}}
+            </div>
+        </div>
 
-    <div class="row">
-      <div class="col s12 left-align">
-          {{form.competition_id}}{{form.option_id}}
-          <input type="submit" class="btn teal lighten-3" value="Confirm Vote!" name="submit_comp"></input>
-      </div>
-    </div>
-  </form>
+        <div class="row">
+            <div class="col s12 left-align">
+                {{form.competition_id}}{{form.option_id}}
+                <input type="submit" class="btn teal lighten-3" value="Confirm Vote!" name="submit_comp"></input>
+            </div>
+        </div>
+    </form>
 
 
 </div>

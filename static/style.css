@@ -2,16 +2,6 @@ html {
     font-family: 'Maven Pro', 'Open Sans', sans-serif;
 }
 
-/*body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
-
-main {
-    flex: 1 0 auto;
-}*/
-
 .parallax img {
     display: inline;
     opacity: 0.4;
@@ -43,8 +33,10 @@ main {
     line-height: 0;
     height: auto;
     /*color: rgba(255, 255, 255, .9);*/
-
 }
+
+
+/*customize banner and campaigns with text on them*/
 
 .parallax-container .section {
     width: 100%;
@@ -54,23 +46,20 @@ main {
     height: 200px;
 }
 
-/*.parallax-container:hover .recos {
-    opacity: 0.4;
+
+/*implement shade on hover feature*/
+
+.parallax-container:hover .hover-opacity .parallax {
+    opacity: 0.6;
 }
 
-.parallax-container:hover .title {
-    opacity: 1;
-}*/
-.parallax-container:hover .hover-opacity .parallax{
-  opacity: 0.6;
-}
-.parallax-container:hover .hover-opacity .parallax img{
-  opacity: 0.7;
+.parallax-container:hover .hover-opacity .parallax img {
+    opacity: 0.7;
 }
 
 .parallax {
-  background-color: black;
-  opacity: 0.9;
+    background-color: black;
+    opacity: 0.9;
 }
 
 @media only screen and (max-width: 992px) {
